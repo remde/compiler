@@ -17,4 +17,4 @@ A->L
 teste teste & # @ e ! if char bool pointer
 <-
 _identificador
-char soma = A + B + C byte
+char soma = A + B + C
