@@ -28,13 +28,13 @@
 "true"			      { return LIT_TRUE; }
 "false"			      { return LIT_FALSE; }
 
-[a-z_0-9]+                    { if( yytext[-1]!='"') {
+[0-9]+                        { hashInsert(yytext, 0); return LIT_INTEGER; }
+
+[a-z_A-Z]+[a-zA-Z_0-9]*       { if( yytext[-1]!='"') {
 				  hashInsert(yytext, 0); 
                                   return TK_IDENTIFIER;
                                 }
                               } 
-                                  
-[A-IO]+                       { hashInsert(yytext, 0); return LIT_INTEGER; }
 
 '(\\.|[^'\n])*\'	      { if (yyleng==3) { 
 				  hashInsert(yytext, 0);
