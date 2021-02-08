@@ -1,0 +1,12 @@
+if int = B
+ZZ Comentario de uma linha 
+else 
+if (O or I) 
+0123identificador
+teste
+99 print
+C <= A
+XXX Testando 
+Comentario de várias
+linhas XXX
+soma = A + B + C byte
