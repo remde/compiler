@@ -30,11 +30,9 @@ int main(int argc, char** argv) {
     {
         token = yylex();
 
-        if (!isRunning())
-            break;
+        if (!isRunning()) break;
 
-        switch(token)
-        {
+        switch(token) {
             case KW_CHAR: fprintf(stdout,"KW_CHAR at line %d \n", getLineNumber()); break;
             case KW_INT: fprintf(stdout,"KW_INT at line %d \n", getLineNumber()); break;
             case KW_BOOL: fprintf(stdout,"KW_BOOL at line %d \n", getLineNumber()); break;
