@@ -65,7 +65,7 @@
 
 <COMMENT>"*/"                    { BEGIN(INITIAL); }
 <COMMENT>.                                      
-<COMMENT>"\n"                     { ++Line; }
+<COMMENT>"\n"                     { ++line; }
 
 %%
 
