@@ -59,9 +59,13 @@
 [ \t]
 "\n"			      { ++line; }
 
-"ZZ".*  
-"XXX"		              { BEGIN(COMMENT); }
+"//".*  
+"/*"		              { BEGIN(COMMENT); }
 .	                      { return TOKEN_ERROR; }
+
+<COMMENT>"*/"                    { BEGIN(INITIAL); }
+<COMMENT>.                                      
+<COMMENT>"\n"                     { ++Line; }
 
 %%
 
