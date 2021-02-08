@@ -39,7 +39,7 @@ HASH_NODE *hashInsert(char *text, int type) {
 
     newnode = (HASH_NODE*) calloc(1, sizeof(HASH_NODE));
     newnode->type = type;
-    newnode->text = (char*) calloc(strlen(text)=1, sizeof(char));
+    newnode->text = (char*) calloc(strlen(text)+1, sizeof(char));
     strcpy(newnode->text, text);
     newnode->next = Table[address];
     Table[address] = newnode;

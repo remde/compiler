@@ -3,9 +3,9 @@
     #include <stdlib.h>
     #include "tokens.h"
     #include "hash.c"
-    #include "main.c"
+    #include "main.c"	
 
-    int isRunning = 1;
+    int isRunningFlag = 1;
     int line = 1;
 %}
 
@@ -29,21 +29,21 @@
 "false"			      { return LIT_FALSE; }
 
 [a-z_0-9]+                    { if( yytext[-1]!='"') {
-				  hashInsert(0,yytext); 
+				  hashInsert(yytext, 0); 
                                   return TK_IDENTIFIER;
                                 }
                               } 
                                   
-[A-IO]+                       { hashInsert(0,yytext); return LIT_INTEGER; }
+[A-IO]+                       { hashInsert(yytext, 0); return LIT_INTEGER; }
 
 '(\\.|[^'\n])*\'	      { if (yyleng==3) { 
-				  hashInsert(0,yytext);
+				  hashInsert(yytext, 0);
                                   return LIT_CHAR;
                                 }
                                 else return TOKEN_ERROR;
                               } 
                 
-\"(\\.|[^\"\n])*\" 	      { hashInsert(0,yytext); return LIT_STRING; }
+\"(\\.|[^\"\n])*\" 	      { hashInsert(yytext, 0); return LIT_STRING; }
 
 [-+*/|(){}<>;,:&$#~]          { return (int)yytext[0]; }
 "["                           { return (int)yytext[0]; }
@@ -65,12 +65,6 @@
 
 %%
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "tokens.h"
-#include "hash.c"
-#include "main.c"
-
 int getLineNumber(void) {   
     return line;
 }
@@ -80,10 +74,10 @@ void initMe(void) {
 }
 
 int isRunning(void) {
-    return isRunning;
+    return isRunningFlag;
 }
     
 int yywrap(void) {
-    isRunning = 0;
+    isRunningFlag = 0;
     return 1;
 } 

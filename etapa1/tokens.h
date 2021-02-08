@@ -25,7 +25,7 @@
 #define OPERATOR_EQ   272
 #define OPERATOR_DIF  273
 #define LEFT_ASSIGN   274
-#define RIGHT_ASSIGN  275 
+#define RIGHT_ASSIGN  275 
 #define TK_IDENTIFIER 280
 
 #define LIT_INTEGER   281
