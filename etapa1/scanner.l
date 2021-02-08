@@ -63,9 +63,9 @@
 "/*"		              { BEGIN(COMMENT); }
 .	                      { return TOKEN_ERROR; }
 
-<COMMENT>"*/"                    { BEGIN(INITIAL); }
+<COMMENT>"*/"                 { BEGIN(INITIAL); }
 <COMMENT>.                                      
-<COMMENT>"\n"                     { ++line; }
+<COMMENT>"\n"                 { ++line; }
 
 %%
 
