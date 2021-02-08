@@ -1,12 +1,20 @@
-if int = B
-ZZ Comentario de uma linha 
+if int = 3
+// Comentario de uma linha 
 else 
-if (O or I) 
+if (AxaI) 
+'c' '-'
+"meu nome"
+true
+false
 0123identificador
 teste
 99 print
 C <= A
-XXX Testando 
+/* Testando 
 Comentario de várias
-linhas XXX
-soma = A + B + C byte
+linhas */
+A->L
+teste teste & # @ e ! if char bool pointer
+<-
+_identificador
+char soma = A + B + C byte
