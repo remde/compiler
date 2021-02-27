@@ -37,6 +37,11 @@
 
 %token TOKEN_ERROR
 
+%left '|' '&'
+%left '<' '>' OPERATOR_EQ OPERATOR_LE OPERATOR_GE OPERATOR_DIF
+%left '+' '-'
+%left '*' '/'
+
 %%
 
 program: declist
@@ -132,13 +137,17 @@ exp:
 	| exp '-' exp
 	| exp '*' exp
 	| exp '/' exp
+	| exp '>' exp
+	| exp '<' exp
+	| exp '|' exp
+	| exp '&' exp
+	| '~' exp
+	| '$' exp
+	| '#' exp
 	| exp OPERATOR_LE exp
 	| exp OPERATOR_GE exp
 	| exp OPERATOR_EQ exp
 	| exp OPERATOR_DIF exp
-	| exp '|' exp
-	| exp '>' exp
-	| exp '<' exp
 	;
 
 func_param:
