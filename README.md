@@ -1,10 +1,10 @@
 # compiler
 This is an implementation for a C-like language compiler. 
 
-The project will be divided in seven parts.
+The project will be divided in seven parts. To compile any of them, run `make` then `./etapaN` inside the respective folder.
 
 ## Part 1 - Lexical Analysis
-Done. Inside the `etapa1` folder, run `make`, then `./etapa1 input.txt output.txt`.
+Done.
 
 ## Part 2 - Syntactic Analysis
-WIP.
+Done.
