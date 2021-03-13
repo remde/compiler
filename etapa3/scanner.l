@@ -25,8 +25,8 @@
 "return"          { return KW_RETURN ; }
 "print"           { return KW_PRINT; }
 
-"true"			      { return LIT_TRUE; }
-"false"			      { return LIT_FALSE; }
+"true"			      { yylval.symbol = hashInsert(LIT_TRUE,yytext); return LIT_TRUE; }
+"false"			      { yylval.symbol = hashInsert(LIT_FALSE,yytext); return LIT_FALSE; }
 
 [0-9]+                { yylval.symbol = hashInsert(LIT_INTEGER,yytext); return LIT_INTEGER; }
 

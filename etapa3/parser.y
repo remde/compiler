@@ -62,10 +62,12 @@
 %type <ast> func_param
 %type <ast> func_param2
 
-%left '|' '&'
-%left '<' '>' OPERATOR_EQ OPERATOR_LE OPERATOR_GE OPERATOR_DIF
-%left '+' '-'
-%left '*' '/'
+%left '<' '>' ':'
+%left '-' '+'
+%left '/' '*'
+%left OPERATOR_LE OPERATOR_GE
+%left OPERATOR_DIF OPERATOR_EQ
+%left '|' '&' '~' '#' '$'
 
 %%
 
