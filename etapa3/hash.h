@@ -11,10 +11,12 @@ typedef struct hash_node {
     struct hash_node *next;
 } HASH_NODE;
 
+HASH_NODE*Table[HASH_SIZE];
+
 void hashInit(void);
 int hashAddress(char *text);
 HASH_NODE *hashFind(char *text);
-HASH_NODE *hashInsert(char *text, int type);
+HASH_NODE *hashInsert(int type, char *text);
 void hashPrint(void);
 
 #endif

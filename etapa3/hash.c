@@ -1,7 +1,5 @@
 #include "hash.h"
 
-HASH_NODE*Table[HASH_SIZE];
-
 void hashInit(void) {
     int i;
     for (i=0; i<HASH_SIZE; ++i) {
@@ -29,21 +27,21 @@ HASH_NODE *hashFind(char *text) {
     return 0;
 }
 
-HASH_NODE *hashInsert(char *text, int type) {
-    HASH_NODE *newnode;
+HASH_NODE *hashInsert(int type, char *text) {
+    HASH_NODE *newNode;
     int address = hashAddress(text);
 
-    if ((newnode=hashFind(text))!=0) {
-        return newnode;
+    if ((newNode=hashFind(text))!=0) {
+        return newNode;
     }
 
-    newnode = (HASH_NODE*) calloc(1, sizeof(HASH_NODE));
-    newnode->type = type;
-    newnode->text = (char*) calloc(strlen(text)+1, sizeof(char));
-    strcpy(newnode->text, text);
-    newnode->next = Table[address];
-    Table[address] = newnode;
-    return newnode;
+    newNode = (HASH_NODE*) calloc(1, sizeof(HASH_NODE));
+    newNode->type = type;
+    newNode->text = (char*) calloc(strlen(text)+1, sizeof(char));
+    strcpy(newNode->text, text);
+    newNode->next = Table[address];
+    Table[address] = newNode;
+    return newNode;
 }
 
 void hashPrint(void) {
