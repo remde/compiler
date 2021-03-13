@@ -8,3 +8,6 @@ Done.
 
 ## Part 2 - Syntactic Analysis
 Done.
+
+## Part 3 - Abstract Syntax Tree
+WIP.
