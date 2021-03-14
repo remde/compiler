@@ -317,7 +317,7 @@ void astDecompile(AST *node) {
             break;
         case AST_ASSIGN:
             fprintf(out,"%s", node->symbol->text); 
-            fprintf(out,":"); 
+            fprintf(out,"<-"); 
             astDecompile(node->child[0]);
             break;
         case AST_ASSIGNARRAY:
