@@ -10,4 +10,7 @@ Done.
 Done.
 
 ## Part 3 - Abstract Syntax Tree
+Done.
+
+## Part 4 - Semantic Analysis
 WIP.
