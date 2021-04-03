@@ -137,13 +137,17 @@ void checkOperands(AST *node) {
 			if(node->child[1]->symbol != NULL) {
                 if((node->symbol->dataType == SYMBOL_DATATYPE_INT || node->symbol->dataType == SYMBOL_DATATYPE_CHAR) &&
                     (node->child[1]->symbol->dataType != SYMBOL_DATATYPE_INT && node->child[1]->symbol->dataType != SYMBOL_DATATYPE_CHAR)) {
-                    fprintf(stderr,"SEMANTIC ERROR in line %d. Variable %s must receive int or char.\n", node->lineNumber,node->symbol->text);
+                    fprintf(stderr,"SEMANTIC ERROR in line %d. Variable %s must receive int or char, not %d.\n", node->lineNumber,node->symbol->text, node->child[1]->symbol->dataType);
                     semanticError++;
 				}
-				else if(node->symbol->dataType == SYMBOL_DATATYPE_POINTER && node->child[1]->symbol->dataType != SYMBOL_DATATYPE_POINTER) {
-                    fprintf(stderr,"SEMANTIC ERROR in line %d. Variable %s must receive pointer.\n", node->lineNumber,node->symbol->text);
+				else if(node->symbol->dataType == SYMBOL_DATATYPE_BOOL && node->child[1]->symbol->dataType != SYMBOL_DATATYPE_BOOL) {
+                    fprintf(stderr,"SEMANTIC ERROR in line %d. Variable %s must receive bool.\n", node->lineNumber,node->symbol->text);
                     semanticError++;
 				}
+                /* else if(node->symbol->dataType == SYMBOL_DATATYPE_POINTER && node->child[1]->symbol->dataType != SYMBOL_DATATYPE_POINTER) { */
+                /*     fprintf(stderr,"SEMANTIC ERROR in line %d. Variable %s must receive valid pointer.\n", node->lineNumber,node->symbol->text); */
+                /*     semanticError++; */
+                /* } */
 			}
             break;
         case AST_VETDEC:
@@ -300,13 +304,42 @@ void checkOperands(AST *node) {
             break;
 		case AST_ADD:
 		case AST_SUB:
+            if(node->child[0] != NULL && node->child[1] != NULL) {
+                if (node->child[0]->dataType == AST_DATATYPE_POINTER) {
+                    node->dataType = AST_DATATYPE_POINTER;
+                    if (node->child[1]->symbol->type != SYMBOL_LIT_INT) {
+                        fprintf(stderr,"SEMANTIC ERROR in line %d. Pointers can only be added or subtracted by constants.\n",node->lineNumber);
+                        semanticError++;
+                    }
+                } else if (node->child[1]->dataType == AST_DATATYPE_POINTER) {
+                    node->dataType = AST_DATATYPE_POINTER;
+                    if (node->child[0]->symbol->type != SYMBOL_LIT_INT) {
+                        fprintf(stderr,"SEMANTIC ERROR in line %d. Pointers can only be added or subtracted by constants.\n",node->lineNumber);
+                        semanticError++;
+                    }
+                } else {
+					if(node->child[0]->dataType == AST_DATATYPE_INT || node->child[1]->dataType == AST_DATATYPE_INT) {
+						node->dataType = AST_DATATYPE_INT;
+					}
+					else {
+						node->dataType = AST_DATATYPE_CHAR;
+					}
+					if((node->child[0]->dataType != AST_DATATYPE_INT && node->child[0]->dataType != AST_DATATYPE_POINTER) ||
+						(node->child[1]->dataType != AST_DATATYPE_INT && node->child[1]->dataType != AST_DATATYPE_POINTER)) {
+						fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be int, or char. \n", node->lineNumber);
+						semanticError++;
+						node->dataType = AST_DATATYPE_ERROR;
+					}
+                }
+            }
+            break;
 		case AST_MULT:
 		case AST_DIV:
 			if(node->child[0] != NULL && node->child[1] != NULL) {
-				if((node->child[0]->dataType == AST_DATATYPE_POINTER && node->child[1]->dataType == AST_DATATYPE_POINTER) ||
-                (node->child[0]->dataType == AST_DATATYPE_POINTER && node->child[1]->dataType == AST_DATATYPE_INT) ||
-                (node->child[0]->dataType == AST_DATATYPE_INT && node->child[1]->dataType == AST_DATATYPE_POINTER)) {
-					node->dataType = AST_DATATYPE_POINTER;
+				if(node->child[0]->dataType == AST_DATATYPE_POINTER || node->child[1]->dataType == AST_DATATYPE_POINTER) {
+                    fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be int, pointer, char or bool. \n", node->lineNumber);
+                    semanticError++;
+                    node->dataType = AST_DATATYPE_ERROR;
 				}
 				else {
 					if(node->child[0]->dataType == AST_DATATYPE_INT || node->child[1]->dataType == AST_DATATYPE_INT) {
@@ -317,7 +350,7 @@ void checkOperands(AST *node) {
 					}
 					if((node->child[0]->dataType != AST_DATATYPE_INT && node->child[0]->dataType != AST_DATATYPE_POINTER) ||
 						(node->child[1]->dataType != AST_DATATYPE_INT && node->child[1]->dataType != AST_DATATYPE_POINTER)) {
-						fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be int, pointer, char or bool. \n", node->lineNumber);
+						fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be int, or char. \n", node->lineNumber);
 						semanticError++;
 						node->dataType = AST_DATATYPE_ERROR;
 					}
@@ -340,7 +373,8 @@ void checkOperands(AST *node) {
                     && node->child[1]->dataType != AST_DATATYPE_POINTER
                     && node->child[1]->dataType != AST_DATATYPE_CHAR
                     && node->child[1]->dataType != AST_DATATYPE_BOOL)) {
-						fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be int, pointer, char or bool. \n",node->lineNumber);
+                    fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be int, pointer, char or bool.\n",
+                            node->lineNumber);
 						semanticError++;
 						node->dataType = AST_DATATYPE_ERROR;
 				}
@@ -351,7 +385,7 @@ void checkOperands(AST *node) {
 			if(node->child[0] != NULL && node->child[1] != NULL) {
 				node->dataType = AST_DATATYPE_BOOL;
 				if(node->child[0]->dataType != AST_DATATYPE_BOOL || node->child[1]->dataType != AST_DATATYPE_BOOL) {
-						fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be bool.\n",node->lineNumber);
+						fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be bool.\n %d\n %d\n",node->lineNumber, node->child[0]->dataType, node->child[1]->dataType);
 						semanticError++;
 						node->dataType = AST_DATATYPE_ERROR;
 				}
@@ -367,6 +401,20 @@ void checkOperands(AST *node) {
 				}
 			}
 			break;
+        case AST_DOLLAR:
+            if(node->child[0] != NULL) {
+                node->dataType = AST_DATATYPE_POINTER;
+            }
+            break;
+        case AST_HASH:
+            if(node->child[0] != NULL) {
+                node->dataType = AST_DATATYPE_INT;
+                if(node->child[0]->dataType != AST_DATATYPE_POINTER) {
+                    fprintf(stderr,"SEMANTIC ERROR in line %d. Operators must be pointer.\n",node->lineNumber);
+                    semanticError++;
+                    node->dataType = AST_DATATYPE_ERROR;
+                }
+            }
 		default:
             break;
         }
@@ -416,9 +464,9 @@ int numParamsFunc(AST* node) {
 
 int checkVet(AST* node, int dataType) {
 	if(node != NULL) {
-		if((node->child[0]->symbol->dataType != dataType) ||
-        (dataType == SYMBOL_DATATYPE_INT || dataType == SYMBOL_DATATYPE_CHAR) &&
-        (node->child[0]->symbol->dataType != SYMBOL_DATATYPE_INT && node->child[0]->symbol->dataType != SYMBOL_DATATYPE_CHAR))
+		if(((node->child[0]->symbol->dataType != dataType) ||
+        (dataType == SYMBOL_DATATYPE_INT || dataType == SYMBOL_DATATYPE_CHAR)) && (
+        (node->child[0]->symbol->dataType != SYMBOL_DATATYPE_INT && node->child[0]->symbol->dataType != SYMBOL_DATATYPE_CHAR)))
 			return 0;
 		if(node->child[1] != NULL)
 			return checkVet(node->child[1], dataType);
@@ -472,20 +520,6 @@ int expressionTypes(int op1,int op2) {
         default:
             return SYMBOL_DATATYPE_ERROR;
         }
-
-    /* case SYMBOL_DATATYPE_BOOL: */
-    /*     switch (op2) { */
-    /*     case SYMBOL_DATATYPE_BOOL: */
-    /*     case SYMBOL_DATATYPE_INT: */
-    /*     case SYMBOL_DATATYPE_CHAR: */
-    /*         return SYMBOL_DATATYPE_INT; */
-
-    /*     case SYMBOL_DATATYPE_POINTER: */
-    /*         return SYMBOL_DATATYPE_POINTER; */
-
-    /*     default: */
-    /*         return SYMBOL_DATATYPE_ERROR; */
-    /*     } */
 
     case SYMBOL_DATATYPE_INT:
         switch (op2) {

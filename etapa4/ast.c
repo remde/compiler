@@ -171,6 +171,10 @@ void astPrint(int level, AST *node) {
             break;
         case AST_HASH:
             fprintf(stderr,"AST_HASH");
+            break;
+        case AST_POINTERDEC:
+            fprintf(stderr,"AST_POINTERDEC");
+            break;
         default:
             fprintf(stderr,"AST_UNKNOWN,");
         break;
@@ -317,6 +321,15 @@ void astDecompile(AST *node) {
             fprintf(out,";"); 
             astDecompile(node->child[2]);
             break;
+        case AST_POINTERDEC:
+            astDecompile(node->child[0]);
+            fprintf(out," ");
+            fprintf(out,"%s", node->symbol->text);
+            fprintf(out,": $");
+            astDecompile(node->child[1]);
+            fprintf(out,";");
+            astDecompile(node->child[2]);
+            break;
         case AST_ASSIGN:
             fprintf(out,"%s", node->symbol->text); 
             fprintf(out,"<-"); 
@@ -443,7 +456,7 @@ void astDecompile(AST *node) {
             fprintf(out,"%s", node->symbol->text);
             break;
         case AST_DOLLAR:
-            fprintf(out,"$ "); 
+            fprintf(out,"$ ");
             astDecompile(node->child[0]);
             break;
         case AST_HASH:

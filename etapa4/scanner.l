@@ -13,22 +13,24 @@
 
 %%
 
-"char"			      { return KW_CHAR; }
+"char"			  { return KW_CHAR; }
 "int"             { return KW_INT; }
-"bool"			      { return KW_BOOL; }
-"pointer"		      { return KW_POINTER; }
+"bool"			  { return KW_BOOL; }
+"pointer"		  { return KW_POINTER; }
 "if"              { return KW_IF; }
 "then"            { return KW_THEN; }
 "else"            { return KW_ELSE; }
-"while"			      { return KW_WHILE; }
+"while"		  { return KW_WHILE; }
 "read"            { return KW_READ; }
 "return"          { return KW_RETURN ; }
 "print"           { return KW_PRINT; }
+"|"               { return OPERATOR_OR; }
+"&"               { return OPERATOR_AND; }
 
-"true"			      { yylval.symbol = hashInsert(LIT_TRUE,yytext); return LIT_TRUE; }
-"false"			      { yylval.symbol = hashInsert(LIT_FALSE,yytext); return LIT_FALSE; }
+"true"			      { yylval.symbol = hashInsert(SYMBOL_LIT_BOOL,yytext); return LIT_TRUE; }
+"false"			      { yylval.symbol = hashInsert(SYMBOL_LIT_BOOL,yytext); return LIT_FALSE; }
 
-[0-9]+                { yylval.symbol = hashInsert(LIT_INTEGER,yytext); return LIT_INTEGER; }
+[0-9]+                { yylval.symbol = hashInsert(SYMBOL_LIT_INT,yytext); return LIT_INTEGER; }
 
 [a-z_A-Z]+[a-zA-Z_0-9]*       { if( yytext[-1]!='"') {
 				                          yylval.symbol = hashInsert(TK_IDENTIFIER,yytext); 
@@ -37,13 +39,13 @@
                               } 
 
 '(\\.|[^'\n])*\'	            { if (yyleng==3) { 
-                                  yylval.symbol = hashInsert(LIT_CHAR,yytext);
+                                  yylval.symbol = hashInsert(SYMBOL_LIT_CHAR,yytext);
                                   return LIT_CHAR;
                                 }
                                 else return TOKEN_ERROR;
                               } 
                 
-\"(\\.|[^\"\n])*\" 	          { yylval.symbol = hashInsert(LIT_STRING,yytext); return LIT_STRING; }
+\"(\\.|[^\"\n])*\" 	          { yylval.symbol = hashInsert(SYMBOL_LIT_STRING,yytext); return LIT_STRING; }
 
 [-+*/|(){}<>;,:&$#~]          { return (int)yytext[0]; }
 "["                           { return (int)yytext[0]; }

@@ -59,7 +59,8 @@
 #define AST_DATATYPE_STRING 51
 #define AST_DATATYPE_VET 52
 #define AST_DATATYPE_FUN 53
-#define AST_DATATYPE_ERROR 54
+#define AST_POINTERDEC 54
+#define AST_DATATYPE_ERROR 55
 
 typedef struct ast_node {
     int type;

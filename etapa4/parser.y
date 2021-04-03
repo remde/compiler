@@ -41,6 +41,9 @@
 %token <symbol>LIT_CHAR
 %token <symbol>LIT_STRING
 
+%token OPERATOR_OR
+%token OPERATOR_AND
+
 %token TOKEN_ERROR
 
 %type <ast> program
@@ -62,12 +65,12 @@
 %type <ast> func_param
 %type <ast> func_param2
 
+%left OPERATOR_OR OPERATOR_AND '~' '#' '$'
 %left '<' '>' ':'
-%left '-' '+'
-%left '/' '*'
 %left OPERATOR_LE OPERATOR_GE
 %left OPERATOR_DIF OPERATOR_EQ
-%left '|' '&' '~' '#' '$'
+%left '-' '+'
+%left '/' '*'
 
 %%
 
@@ -81,6 +84,7 @@ declist:
 
 dec: 
 	type TK_IDENTIFIER ':' lit ';'							{$$=astCreate(AST_VARDEC,$2,$1,$4,0,0,getLineNumber());}
+    | type TK_IDENTIFIER ':' '$' TK_IDENTIFIER ';'          {$$=astCreate(AST_POINTERDEC,$2,$1,$5,0,0,getLineNumber());}
 	| type TK_IDENTIFIER '('')'cmd_list						{$$=astCreate(AST_DECFUNC_VOID,$2,$1,$5,0,0,getLineNumber());}
 	| type TK_IDENTIFIER '('dec_param')' cmd_list			{$$=astCreate(AST_DECFUNC,$2,$1,$4,$6,0,getLineNumber());}
 	| type '['LIT_INTEGER']' TK_IDENTIFIER array_init ';'	{$$=astCreate(AST_VETDEC,$5,$1,astCreate(AST_VECSIZE, $3, 0, 0, 0, 0,getLineNumber()),$6,0,getLineNumber());}
@@ -111,14 +115,14 @@ print_list:
 	;
 
 cmd:
-	TK_IDENTIFIER ':' exp							{$$=astCreate(AST_ASSIGN,$1,$3,0,0,0,getLineNumber());}
-	| TK_IDENTIFIER LEFT_ASSIGN exp					{$$=astCreate(AST_ASSIGN,$1,$3,0,0,0,getLineNumber());}
+	TK_IDENTIFIER LEFT_ASSIGN exp					{$$=astCreate(AST_ASSIGN,$1,$3,0,0,0,getLineNumber());}
 	| exp RIGHT_ASSIGN TK_IDENTIFIER				{$$=astCreate(AST_ASSIGN,$3,$1,0,0,0,getLineNumber());}
 	| TK_IDENTIFIER '[' exp ']' LEFT_ASSIGN exp		{$$=astCreate(AST_ASSIGNARRAY,$1,$3,$6,0,0,getLineNumber());}
 	| exp RIGHT_ASSIGN TK_IDENTIFIER '[' exp ']'	{$$=astCreate(AST_ASSIGNARRAY,$3,$5,$1,0,0,getLineNumber());}
 	| KW_RETURN exp									{$$=astCreate(AST_RETURN,0,$2,0,0,0,getLineNumber());}
 	| KW_READ TK_IDENTIFIER							{$$=astCreate(AST_READ,$2,0,0,0,0,getLineNumber());}
 	| KW_PRINT print	 							{$$=astCreate(AST_PRINT,0,$2,0,0,0,getLineNumber());}
+	/* | TK_IDENTIFIER ':' exp							{$$=astCreate(AST_ASSIGN,$1,$3,0,0,0,getLineNumber());} */
 	| block 										{$$=$1;}
 	| ctrl_flow										{$$=$1;}
 	|												{$$=0;}
@@ -170,8 +174,8 @@ exp:
 	| exp '/' exp						{$$=astCreate(AST_DIV,0,$1,$3,0,0,getLineNumber());}
 	| exp '>' exp						{$$=astCreate(AST_GREATER,0,$1,$3,0,0,getLineNumber());}
 	| exp '<' exp						{$$=astCreate(AST_LESS,0,$1,$3,0,0,getLineNumber());}
-	| exp '|' exp						{$$=astCreate(AST_OR,0,$1,$3,0,0,getLineNumber());}
-	| exp '&' exp						{$$=astCreate(AST_AND,0,$1,$3,0,0,getLineNumber());}
+	| exp OPERATOR_OR exp						{$$=astCreate(AST_OR,0,$1,$3,0,0,getLineNumber());}
+	| exp OPERATOR_AND exp						{$$=astCreate(AST_AND,0,$1,$3,0,0,getLineNumber());}
 	| '~' exp							{$$=astCreate(AST_NOT,0,$2,0,0,0,getLineNumber());}
 	| '$' exp							{$$=astCreate(AST_DOLLAR,0,$2,0,0,0,getLineNumber());}
 	| '#' exp							{$$=astCreate(AST_HASH,0,$2,0,0,0,getLineNumber());}
