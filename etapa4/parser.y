@@ -84,7 +84,7 @@ declist:
 
 dec: 
 	type TK_IDENTIFIER ':' lit ';'							{$$=astCreate(AST_VARDEC,$2,$1,$4,0,0,getLineNumber());}
-    | type TK_IDENTIFIER ':' '$' TK_IDENTIFIER ';'          {$$=astCreate(AST_POINTERDEC,$2,$1,$5,0,0,getLineNumber());}
+    /* | type TK_IDENTIFIER ':' '$' TK_IDENTIFIER ';'          {$$=astCreate(AST_POINTERDEC,$2,$1,$5,0,0,getLineNumber());} */
 	| type TK_IDENTIFIER '('')'cmd_list						{$$=astCreate(AST_DECFUNC_VOID,$2,$1,$5,0,0,getLineNumber());}
 	| type TK_IDENTIFIER '('dec_param')' cmd_list			{$$=astCreate(AST_DECFUNC,$2,$1,$4,$6,0,getLineNumber());}
 	| type '['LIT_INTEGER']' TK_IDENTIFIER array_init ';'	{$$=astCreate(AST_VETDEC,$5,$1,astCreate(AST_VECSIZE, $3, 0, 0, 0, 0,getLineNumber()),$6,0,getLineNumber());}
