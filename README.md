@@ -13,4 +13,7 @@ Done.
 Done.
 
 ## Part 4 - Semantic Analysis
-WIP.
+Done.
+
+## Part 5 - Three-Address Code (TAC) Generation
+Done.
