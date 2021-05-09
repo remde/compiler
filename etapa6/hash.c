@@ -119,6 +119,7 @@ void hashPrintAsm(FILE *fout) {
                     break;
                 case SYMBOL_LIT_STRING:
                     fprintf(fout,"\n_string%d:\t.string\t%s\n",numString,node->text);
+                    numString++;
                     break;
                 default:
                     fprintf(fout,"\n\t.globl	_%s\n"
