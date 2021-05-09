@@ -5,3 +5,9 @@
 relatorio/
 *.tgz
 *.o
+*.txt
+*.s
+*.output
+*.yy.c
+*.tab.c
+*.tab.h
