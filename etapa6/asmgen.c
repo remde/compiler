@@ -50,7 +50,7 @@ void generateAsm(TAC *first, char *filename) {
                 fprintf(fout, "# PRINT\n"
                                 "\tmovl	_%s(%%rip), %%eax\n"
                                 "\tmovl	%%eax, %%esi\n"
-                                "\tleaq	.meuString(%%rip), %%rdi\n"
+                                "\tleaq	.myString(%%rip), %%rdi\n"
                                 "\tmovl	$0, %%eax\n"
                                 "\tcall	printf@PLT\n\n",
                                 tac->res?tac->res->text:"");

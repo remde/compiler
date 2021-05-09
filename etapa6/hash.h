@@ -47,5 +47,6 @@ HASH_NODE* makeTemp(void);
 HASH_NODE* makeLabel(void);
 
 void hashPrintAsm(FILE *fout);
+int convertInteger(char *text);
 
 #endif

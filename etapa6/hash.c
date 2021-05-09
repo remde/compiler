@@ -115,7 +115,7 @@ void hashPrintAsm(FILE *fout) {
                     fprintf(fout,"\n_%s:\t.long\t0\n",node->text);
                     break;
                 case SYMBOL_LIT_INT:
-                    fprintf(fout,"\n_%s:\t.long\t%d\n",node->text);
+                    fprintf(fout,"\n_%s:\t.long\t%d\n",node->text,convertInteger(node->text));
                     break;
                 case SYMBOL_LIT_STRING:
                     fprintf(fout,"\n_string%d:\t.string\t%s\n",numString,node->text);
@@ -132,4 +132,28 @@ void hashPrintAsm(FILE *fout) {
             }
         }
     }
+}
+
+int convertInteger(char *text) {
+    if(strcmp (text, "0") == 0)
+        return 0;
+    if(strcmp (text, "1") == 0)
+        return 1;
+    if(strcmp (text, "2") == 0)
+        return 2;
+    if(strcmp (text, "3") == 0)
+        return 3;
+    if(strcmp (text, "4") == 0)
+        return 4;
+    if(strcmp (text, "5") == 0)
+        return 5;
+    if(strcmp (text, "6") == 0)
+        return 6;
+    if(strcmp (text, "7") == 0)
+        return 7;
+    if(strcmp (text, "8") == 0)
+        return 8;
+    if(strcmp (text, "9") == 0)
+        return 9;
+    return 0;
 }
