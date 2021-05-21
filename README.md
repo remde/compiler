@@ -17,3 +17,6 @@ Done.
 
 ## Part 5 - Three-Address Code (TAC) Generation
 Done.
+
+## Part 6 - Assembler Generation
+Done.
